@@ -3,6 +3,7 @@ import {
   releaseStock,
   consumeStock,
 } from "../services/inventoryService.js";
+import { StockMovement } from "../models/StockMovement.js";
 
 export async function reserve(req, res) {
   const { productId, quantity, referenceType, referenceId, note } = req.body;
@@ -58,5 +59,19 @@ export async function consume(req, res) {
     success: true,
     message: "Stock consumed successfully",
     product,
+  });
+}
+
+export async function getMovements(req, res) {
+  const movements = await StockMovement.find({
+    product: req.params.productId,
+  })
+    .populate("product", "sku name")
+    .populate("performedBy", "name email")
+    .sort({ createdAt: -1 });
+
+  res.json({
+    success: true,
+    movements,
   });
 }
