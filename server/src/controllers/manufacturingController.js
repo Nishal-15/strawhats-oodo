@@ -7,6 +7,7 @@ import { ApiError } from "../utils/ApiError.js";
 import {
   confirmManufacturingOrder,
   createWorkOrdersForMO,
+  completeManufacturingOrder,
 } from "../services/manufacturingService.js";
 
 export async function createManufacturingOrder(req, res) {
@@ -153,5 +154,25 @@ export async function createWorkOrdersController(
     success: true,
     message: "Work orders created successfully",
     workOrders,
+  });
+}
+
+export async function completeManufacturingOrderController(
+  req,
+  res
+) {
+  const { id } = req.params;
+
+  const manufacturingOrder =
+    await completeManufacturingOrder({
+      manufacturingOrderId: id,
+      userId: req.user._id,
+    });
+
+  res.json({
+    success: true,
+    message:
+      "Manufacturing order completed successfully",
+    manufacturingOrder,
   });
 }

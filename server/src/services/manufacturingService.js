@@ -139,3 +139,153 @@ export async function createWorkOrdersForMO({
 
   return WorkOrder.insertMany(workOrders);
 }
+
+export async function completeManufacturingOrder({
+  manufacturingOrderId,
+  userId,
+}) {
+  const session = await mongoose.startSession();
+
+  try {
+    let completedMO;
+
+    await session.withTransaction(async () => {
+      const mo = await ManufacturingOrder.findById(
+        manufacturingOrderId
+      ).session(session);
+
+      if (!mo) {
+        throw new ApiError(
+          404,
+          "Manufacturing order not found"
+        );
+      }
+
+      if (mo.status !== "IN_PROGRESS") {
+        throw new ApiError(
+          400,
+          `Cannot complete MO in ${mo.status} status`
+        );
+      }
+
+      const workOrders = await WorkOrder.find({
+        manufacturingOrder: mo._id,
+      })
+        .sort({ sequence: 1 })
+        .session(session);
+
+      if (workOrders.length === 0) {
+        throw new ApiError(
+          400,
+          "No work orders found"
+        );
+      }
+
+      const incompleteWorkOrder = workOrders.find(
+        (workOrder) =>
+          workOrder.status !== "COMPLETED"
+      );
+
+      if (incompleteWorkOrder) {
+        throw new ApiError(
+          400,
+          `Work order "${incompleteWorkOrder.name}" is not completed`
+        );
+      }
+
+      // Consume components
+      for (const component of mo.components) {
+        const product = await Product.findById(
+          component.product
+        ).session(session);
+
+        if (!product) {
+          throw new ApiError(
+            404,
+            "Component product not found"
+          );
+        }
+
+        const quantity = component.requiredQuantity;
+
+        if (product.stock.reserved < quantity) {
+          throw new ApiError(
+            400,
+            `Reserved stock is insufficient for ${product.name}`
+          );
+        }
+
+        if (product.stock.onHand < quantity) {
+          throw new ApiError(
+            400,
+            `On-hand stock is insufficient for ${product.name}`
+          );
+        }
+
+        product.stock.onHand -= quantity;
+        product.stock.reserved -= quantity;
+
+        await product.save({ session });
+
+        await StockMovement.create(
+          [
+            {
+              product: product._id,
+              type: "CONSUMPTION",
+              quantity,
+              referenceType: "MANUFACTURING_ORDER",
+              referenceId: mo._id,
+              performedBy: userId,
+              note: `Consumed for Manufacturing Order ${mo._id}`,
+            },
+          ],
+          { session }
+        );
+      }
+
+      // Produce finished goods
+      const finishedProduct = await Product.findById(
+        mo.product
+      ).session(session);
+
+      if (!finishedProduct) {
+        throw new ApiError(
+          404,
+          "Finished product not found"
+        );
+      }
+
+      finishedProduct.stock.onHand += mo.quantity;
+
+      await finishedProduct.save({ session });
+
+      await StockMovement.create(
+        [
+          {
+            product: finishedProduct._id,
+            type: "PRODUCTION",
+            quantity: mo.quantity,
+            referenceType: "MANUFACTURING_ORDER",
+            referenceId: mo._id,
+            performedBy: userId,
+            note: `Produced from Manufacturing Order ${mo._id}`,
+          },
+        ],
+        { session }
+      );
+
+      mo.operations = mo.operations.map((operation) => ({
+        ...operation.toObject(),
+        status: "COMPLETED",
+}));
+
+    mo.status = "COMPLETED";
+
+    completedMO = await mo.save({ session });
+    });
+
+    return completedMO;
+  } finally {
+    await session.endSession();
+  }
+}
