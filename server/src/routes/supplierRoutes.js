@@ -14,13 +14,13 @@ router.use(requireAuth);
 
 router.post(
   "/",
-  requireRoles("ADMIN", "OWNER", "PURCHASING"),
+  requireRoles("ADMIN", "BUSINESS_OWNER", "PURCHASE_USER"),
   createSupplier
 );
 
 router.get(
   "/",
-  requireRoles("ADMIN", "OWNER", "PURCHASING"),
+  requireRoles("ADMIN", "BUSINESS_OWNER", "PURCHASE_USER"),
   getSuppliers
 );
 

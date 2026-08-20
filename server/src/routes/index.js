@@ -11,6 +11,8 @@ import salesOrderRoutes from "./salesOrderRoutes.js";
 import supplierRoutes from "./supplierRoutes.js";
 import purchaseOrderRoutes from "./purchaseOrderRoutes.js";
 import inventoryAdjustmentRoutes from "./inventoryAdjustmentRoutes.js";
+import dashboardRoutes from "./dashboardRoutes.js";
+import stockMovementRoutes from "./stockMovementRoutes.js";
 
 const router = Router();
 
@@ -35,6 +37,16 @@ router.use(
 router.use(
   "/inventory-adjustments",
   inventoryAdjustmentRoutes
+);
+
+router.use(
+  "/dashboard",
+  dashboardRoutes
+);
+
+router.use(
+  "/stock-movements",
+  stockMovementRoutes
 );
 
 

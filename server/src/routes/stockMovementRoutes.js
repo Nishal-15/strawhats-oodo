@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
-  createInventoryAdjustmentController,
-} from "../controllers/inventoryAdjustmentController.js";
+  getStockMovements,
+} from "../controllers/stockMovementController.js";
 import {
   requireAuth,
   requireRoles,
@@ -11,10 +11,10 @@ const router = Router();
 
 router.use(requireAuth);
 
-router.post(
+router.get(
   "/",
-  requireRoles("ADMIN", "INVENTORY_MANAGER"),
-  createInventoryAdjustmentController
+  requireRoles("ADMIN", "BUSINESS_OWNER", "INVENTORY_MANAGER"),
+  getStockMovements
 );
 
 export default router;

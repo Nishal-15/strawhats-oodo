@@ -1,26 +1,45 @@
 import { Router } from "express";
+
 import {
   createBoM,
   getBoMs,
   assignWorkCenters,
 } from "../controllers/bomController.js";
+
 import { requireAuth, requireRoles } from "../middleware/auth.js";
 
 const router = Router();
 
 router.use(requireAuth);
 
-router.get("/", getBoMs);
+// View BoMs
+router.get(
+  "/",
+  requireRoles(
+    "ADMIN",
+    "BUSINESS_OWNER",
+    "MANUFACTURE_USER"
+  ),
+  getBoMs
+);
 
+// Assign work centers
 router.patch(
   "/operations/work-centers",
-  requireRoles("ADMIN", "OWNER", "MANUFACTURING"),
+  requireRoles(
+    "ADMIN",
+    "MANUFACTURE_USER"
+  ),
   assignWorkCenters
 );
 
+// Create BoM
 router.post(
   "/",
-  requireRoles("ADMIN", "OWNER", "MANUFACTURING"),
+  requireRoles(
+    "ADMIN",
+    "MANUFACTURE_USER"
+  ),
   createBoM
 );
 
