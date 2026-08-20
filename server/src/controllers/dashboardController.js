@@ -5,6 +5,22 @@ import { ManufacturingOrder } from "../models/ManufacturingOrder.js";
 import { StockMovement } from "../models/StockMovement.js";
 
 export async function getDashboardSummary(req, res) {
+  const role = req.user.role;
+
+  const isAdmin = role === "ADMIN";
+  const isOwner = role === "BUSINESS_OWNER";
+  const isSales = role === "SALES_USER";
+  const isPurchase = role === "PURCHASE_USER";
+  const isManufacturing = role === "MANUFACTURE_USER";
+  const isInventory = role === "INVENTORY_MANAGER";
+
+  const showBusinessData = isAdmin || isOwner;
+  const showSales = showBusinessData || isSales;
+  const showPurchase = showBusinessData || isPurchase;
+  const showManufacturing = showBusinessData || isManufacturing;
+  const showInventory =
+    showBusinessData || isInventory;
+
   const [
     products,
     salesOrders,
@@ -12,37 +28,45 @@ export async function getDashboardSummary(req, res) {
     manufacturingOrders,
     recentMovements,
   ] = await Promise.all([
-    Product.find({ active: true }),
+    showInventory || showManufacturing
+      ? Product.find({ active: true })
+      : Promise.resolve([]),
 
-    SalesOrder.find({
-      status: {
-        $in: ["DRAFT", "CONFIRMED"],
-      },
-    }),
+    showSales
+      ? SalesOrder.find({
+          status: {
+            $in: ["DRAFT", "CONFIRMED"],
+          },
+        })
+      : Promise.resolve([]),
 
-    PurchaseOrder.find({
-      status: {
-        $in: ["DRAFT", "CONFIRMED"],
-      },
-    }),
+    showPurchase
+      ? PurchaseOrder.find({
+          status: {
+            $in: ["DRAFT", "CONFIRMED"],
+          },
+        })
+      : Promise.resolve([]),
 
-    ManufacturingOrder.find({
-      status: {
-        $in: ["DRAFT", "CONFIRMED", "IN_PROGRESS"],
-      },
-    }),
+    showManufacturing
+      ? ManufacturingOrder.find({
+          status: {
+            $in: [
+              "DRAFT",
+              "CONFIRMED",
+              "IN_PROGRESS",
+            ],
+          },
+        })
+      : Promise.resolve([]),
 
-    StockMovement.find()
-      .populate(
-        "product",
-        "sku name"
-      )
-      .populate(
-        "performedBy",
-        "name email"
-      )
-      .sort({ createdAt: -1 })
-      .limit(10),
+    showInventory || showBusinessData
+      ? StockMovement.find()
+          .populate("product", "sku name")
+          .populate("performedBy", "name email")
+          .sort({ createdAt: -1 })
+          .limit(10)
+      : Promise.resolve([]),
   ]);
 
   let totalOnHand = 0;
@@ -90,38 +114,69 @@ export async function getDashboardSummary(req, res) {
   res.json({
     success: true,
 
+    role,
+
     summary: {
-      totalProducts: products.length,
+      totalProducts:
+        showInventory || showManufacturing
+          ? products.length
+          : 0,
 
-      totalOnHand,
+      totalOnHand:
+        showInventory || showBusinessData
+          ? totalOnHand
+          : 0,
 
-      totalReserved,
+      totalReserved:
+        showInventory || showBusinessData
+          ? totalReserved
+          : 0,
 
       totalFreeToUse:
-        totalOnHand - totalReserved,
+        showInventory || showBusinessData
+          ? totalOnHand - totalReserved
+          : 0,
 
-      inventoryValue,
+      inventoryValue:
+        showInventory || showBusinessData
+          ? inventoryValue
+          : 0,
 
       openSalesOrders:
-        salesOrders.length,
+        showSales
+          ? salesOrders.length
+          : 0,
 
       openSalesOrderValue:
-        salesOrderValue,
+        showSales
+          ? salesOrderValue
+          : 0,
 
       openPurchaseOrders:
-        purchaseOrders.length,
+        showPurchase
+          ? purchaseOrders.length
+          : 0,
 
       openPurchaseOrderValue:
-        purchaseOrderValue,
+        showPurchase
+          ? purchaseOrderValue
+          : 0,
 
       activeManufacturingOrders:
-        manufacturingOrders.length,
+        showManufacturing
+          ? manufacturingOrders.length
+          : 0,
 
       lowStockCount:
-        lowStockProducts.length,
+        showInventory || showBusinessData
+          ? lowStockProducts.length
+          : 0,
     },
 
-    lowStockProducts,
+    lowStockProducts:
+      showInventory || showBusinessData
+        ? lowStockProducts
+        : [],
 
     recentMovements,
   });

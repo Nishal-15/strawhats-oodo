@@ -13,6 +13,7 @@ import purchaseOrderRoutes from "./purchaseOrderRoutes.js";
 import inventoryAdjustmentRoutes from "./inventoryAdjustmentRoutes.js";
 import dashboardRoutes from "./dashboardRoutes.js";
 import stockMovementRoutes from "./stockMovementRoutes.js";
+import userRoutes from "./userRoutes.js";
 
 const router = Router();
 
@@ -22,7 +23,7 @@ router.use("/inventory", inventoryRoutes);
 router.use("/boms", bomRoutes);
 router.use("/work-centers", workCenterRoutes);
 router.use(
-  "/manufacturing-orders",
+  "/manufacturing",
   manufacturingRoutes
 );
 router.use("/work-orders", workOrderRoutes);
@@ -49,5 +50,9 @@ router.use(
   stockMovementRoutes
 );
 
+router.use(
+  "/users",
+  userRoutes
+);
 
 export default router;

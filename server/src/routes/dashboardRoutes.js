@@ -13,7 +13,14 @@ router.use(requireAuth);
 
 router.get(
   "/summary",
-  requireRoles("ADMIN", "BUSINESS_OWNER"),
+  requireRoles(
+  "ADMIN",
+  "BUSINESS_OWNER",
+  "SALES_USER",
+  "PURCHASE_USER",
+  "MANUFACTURE_USER",
+  "INVENTORY_MANAGER"
+),
   getDashboardSummary
 );
 

@@ -108,8 +108,10 @@ async function getCompleteBoM(bomId) {
     .populate("product", "sku name");
 
   const operations = await BoMOperation.find({
-    bom: bomId,
-  }).sort({ sequence: 1 });
+  bom: bom._id,
+})
+  .populate("workCenter", "name location")
+  .sort({ sequence: 1 });
 
   return {
     ...bom.toObject(),
@@ -129,9 +131,11 @@ export async function getBoMs(req, res) {
         bom: bom._id,
       }).populate("product", "sku name");
 
-      const operations = await BoMOperation.find({
-        bom: bom._id,
-      }).sort({ sequence: 1 });
+    const operations = await BoMOperation.find({
+  bom: bom._id,
+})
+  .populate("workCenter", "name location")
+  .sort({ sequence: 1 });
 
       return {
         ...bom.toObject(),

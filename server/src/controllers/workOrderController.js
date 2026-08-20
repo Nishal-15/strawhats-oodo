@@ -3,6 +3,26 @@ import {
   completeWorkOrder,
 } from "../services/workOrderService.js";
 
+import { WorkOrder } from "../models/WorkOrder.js";
+
+export async function getWorkOrders(req, res) {
+  const workOrders = await WorkOrder.find()
+    .populate(
+      "manufacturingOrder",
+      "product quantity status"
+    )
+    .populate(
+      "workCenter",
+      "name location"
+    )
+    .sort({ createdAt: -1 });
+
+  res.json({
+    success: true,
+    workOrders,
+  });
+}
+
 export async function startWorkOrderController(req, res) {
   const { id } = req.params;
 

@@ -18,9 +18,12 @@ router.use(requireAuth);
 // View products
 router.get(
   "/",
-  requireRoles(
+ requireRoles(
     "ADMIN",
     "BUSINESS_OWNER",
+    "SALES_USER",
+    "PURCHASE_USER",
+    "MANUFACTURE_USER",
     "INVENTORY_MANAGER"
   ),
   listProducts
@@ -30,8 +33,12 @@ router.get(
 router.get(
   "/:id",
   requireRoles(
+    
     "ADMIN",
     "BUSINESS_OWNER",
+    "SALES_USER",
+    "PURCHASE_USER",
+    "MANUFACTURE_USER",
     "INVENTORY_MANAGER"
   ),
   getProduct

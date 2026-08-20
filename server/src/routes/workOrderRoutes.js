@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import {
+  getWorkOrders,
   startWorkOrderController,
   completeWorkOrderController,
 } from "../controllers/workOrderController.js";
@@ -14,21 +15,31 @@ const router = Router();
 
 router.use(requireAuth);
 
-// Start work order
+router.get(
+  "/",
+  requireRoles(
+    "ADMIN",
+    "BUSINESS_OWNER",
+    "MANUFACTURE_USER"
+  ),
+  getWorkOrders
+);
+
 router.patch(
   "/:id/start",
   requireRoles(
     "ADMIN",
+    "BUSINESS_OWNER",
     "MANUFACTURE_USER"
   ),
   startWorkOrderController
 );
 
-// Complete work order
 router.patch(
   "/:id/complete",
   requireRoles(
     "ADMIN",
+    "BUSINESS_OWNER",
     "MANUFACTURE_USER"
   ),
   completeWorkOrderController

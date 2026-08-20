@@ -31,7 +31,7 @@ const bomOperationSchema = new mongoose.Schema(
     workCenter: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "WorkCenter",
-    required: true,
+    default:null,
     },
 
   },
