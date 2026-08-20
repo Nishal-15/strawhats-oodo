@@ -6,6 +6,8 @@ import bomRoutes from "./bomRoutes.js";
 import workCenterRoutes from "./workCenterRoutes.js";
 import manufacturingRoutes from "./manufacturingRoutes.js";
 import workOrderRoutes from "./workOrderRoutes.js";
+import customerRoutes from "./customerRoutes.js";
+import salesOrderRoutes from "./salesOrderRoutes.js";
 
 const router = Router();
 
@@ -19,5 +21,7 @@ router.use(
   manufacturingRoutes
 );
 router.use("/work-orders", workOrderRoutes);
+router.use("/customers", customerRoutes);
+router.use("/sales-orders", salesOrderRoutes);
 
 export default router;
