@@ -3,6 +3,7 @@ import {
   createSalesOrder,
   confirmSalesOrderController,
   deliverSalesOrderController,
+  getSalesOrders,
 } from "../controllers/salesOrderController.js";
 import {
   requireAuth,
@@ -29,6 +30,12 @@ router.patch(
   "/:id/deliver",
   requireRoles("ADMIN", "OWNER", "SALES"),
   deliverSalesOrderController
+);
+
+router.get(
+  "/",
+  requireRoles("ADMIN", "OWNER", "SALES"),
+  getSalesOrders
 );
 
 export default router;

@@ -176,3 +176,22 @@ export async function completeManufacturingOrderController(
     manufacturingOrder,
   });
 }
+
+export async function getManufacturingOrders(req, res) {
+  const manufacturingOrders =
+    await ManufacturingOrder.find()
+      .populate("product", "sku name")
+      .populate("bom", "product quantity active")
+      .populate("components.product", "sku name")
+      .populate(
+        "operations.workCenter",
+        "name location"
+      )
+      .populate("createdBy", "name email")
+      .sort({ createdAt: -1 });
+
+  res.json({
+    success: true,
+    manufacturingOrders,
+  });
+}

@@ -4,6 +4,7 @@ import {
   confirmManufacturingOrderController,
   createWorkOrdersController,
   completeManufacturingOrderController,
+  getManufacturingOrders,
 
 } from "../controllers/manufacturingController.js";
 
@@ -39,5 +40,12 @@ router.patch(
   requireRoles("ADMIN", "OWNER", "MANUFACTURING"),
   completeManufacturingOrderController
 );
+
+router.get(
+  "/",
+  requireRoles("ADMIN", "OWNER", "MANUFACTURING"),
+  getManufacturingOrders
+);
+
 
 export default router;

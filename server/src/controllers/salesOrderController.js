@@ -122,3 +122,26 @@ export async function deliverSalesOrderController(
     salesOrder,
   });
 }
+
+export async function getSalesOrders(req, res) {
+  const salesOrders =
+    await SalesOrder.find()
+      .populate(
+        "customer",
+        "name email phone"
+      )
+      .populate(
+        "items.product",
+        "sku name salesPrice"
+      )
+      .populate(
+        "createdBy",
+        "name email"
+      )
+      .sort({ createdAt: -1 });
+
+  res.json({
+    success: true,
+    salesOrders,
+  });
+}

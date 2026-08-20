@@ -8,6 +8,8 @@ import manufacturingRoutes from "./manufacturingRoutes.js";
 import workOrderRoutes from "./workOrderRoutes.js";
 import customerRoutes from "./customerRoutes.js";
 import salesOrderRoutes from "./salesOrderRoutes.js";
+import supplierRoutes from "./supplierRoutes.js";
+import purchaseOrderRoutes from "./purchaseOrderRoutes.js";
 
 const router = Router();
 
@@ -23,5 +25,10 @@ router.use(
 router.use("/work-orders", workOrderRoutes);
 router.use("/customers", customerRoutes);
 router.use("/sales-orders", salesOrderRoutes);
+router.use("/suppliers", supplierRoutes);
+router.use(
+  "/purchase-orders",
+  purchaseOrderRoutes
+);
 
 export default router;
