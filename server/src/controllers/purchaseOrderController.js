@@ -130,3 +130,25 @@ export async function receivePurchaseOrderController(
     purchaseOrder,
   });
 }
+
+export async function getPurchaseOrders(req, res) {
+  const purchaseOrders = await PurchaseOrder.find()
+    .populate(
+      "supplier",
+      "name email phone"
+    )
+    .populate(
+      "items.product",
+      "sku name costPrice"
+    )
+    .populate(
+      "createdBy",
+      "name email"
+    )
+    .sort({ createdAt: -1 });
+
+  res.json({
+    success: true,
+    purchaseOrders,
+  });
+}

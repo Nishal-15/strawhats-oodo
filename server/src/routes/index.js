@@ -10,6 +10,7 @@ import customerRoutes from "./customerRoutes.js";
 import salesOrderRoutes from "./salesOrderRoutes.js";
 import supplierRoutes from "./supplierRoutes.js";
 import purchaseOrderRoutes from "./purchaseOrderRoutes.js";
+import inventoryAdjustmentRoutes from "./inventoryAdjustmentRoutes.js";
 
 const router = Router();
 
@@ -30,5 +31,11 @@ router.use(
   "/purchase-orders",
   purchaseOrderRoutes
 );
+
+router.use(
+  "/inventory-adjustments",
+  inventoryAdjustmentRoutes
+);
+
 
 export default router;

@@ -3,6 +3,7 @@ import {
   createPurchaseOrder,
   confirmPurchaseOrderController,
   receivePurchaseOrderController,
+  getPurchaseOrders,
 } from "../controllers/purchaseOrderController.js";
 import {
   requireAuth,
@@ -29,6 +30,12 @@ router.patch(
   "/:id/receive",
   requireRoles("ADMIN", "OWNER", "PURCHASING"),
   receivePurchaseOrderController
+);
+
+router.get(
+  "/",
+  requireRoles("ADMIN", "OWNER", "PURCHASING"),
+  getPurchaseOrders
 );
 
 

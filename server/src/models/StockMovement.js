@@ -38,6 +38,7 @@ const stockMovementSchema = new mongoose.Schema(
         "PURCHASE_ORDER",
         "MANUFACTURING_ORDER",
         "MANUAL",
+        "INVENTORY_ADJUSTMENT",
       ],
       default: "MANUAL",
     },
