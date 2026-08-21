@@ -173,7 +173,7 @@ export default function PurchaseOrders() {
     <main className="page">
       <header className="topbar">
         <div>
-          <Link to="/">← Dashboard</Link>
+          <Link to="/dashboard">← Dashboard</Link>
           <h1>Purchase Orders</h1>
         </div>
       </header>

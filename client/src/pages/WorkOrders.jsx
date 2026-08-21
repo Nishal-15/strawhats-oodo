@@ -67,7 +67,7 @@ export default function WorkOrders() {
     <main className="page">
       <header className="topbar">
         <div>
-          <Link to="/">← Dashboard</Link>
+          <Link to="/dashboard">← Dashboard</Link>
           <h1>Work Orders</h1>
         </div>
       </header>

@@ -171,7 +171,7 @@ export default function SalesOrders() {
     <main className="page">
       <header className="topbar">
         <div>
-          <Link to="/">← Dashboard</Link>
+          <Link to="/dashboard">← Dashboard</Link>
           <h1>Sales Orders</h1>
         </div>
       </header>

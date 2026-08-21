@@ -61,7 +61,7 @@ export default function Customers() {
     <main className="page">
       <header className="topbar">
         <div>
-          <Link to="/">← Dashboard</Link>
+          <Link to="/dashboard">← Dashboard</Link>
           <h1>Customers</h1>
         </div>
       </header>

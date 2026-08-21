@@ -61,7 +61,7 @@ export default function Suppliers() {
     <main className="page">
       <header className="topbar">
         <div>
-          <Link to="/">← Dashboard</Link>
+          <Link to="/dashboard">← Dashboard</Link>
           <h1>Suppliers</h1>
         </div>
       </header>

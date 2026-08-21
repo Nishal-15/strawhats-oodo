@@ -144,7 +144,7 @@ export default function ManufacturingOrders() {
     <main className="page">
       <header className="topbar">
         <div>
-          <Link to="/">← Dashboard</Link>
+          <Link to="/dashboard">← Dashboard</Link>
           <h1>Manufacturing Orders</h1>
         </div>
       </header>

@@ -57,7 +57,7 @@ export default function Products() {
     <main className="page">
       <header className="topbar">
         <div>
-          <Link to="/">← Dashboard</Link>
+          <Link to="/dashboard">← Dashboard</Link>
           <h1>Products</h1>
         </div>
       </header>

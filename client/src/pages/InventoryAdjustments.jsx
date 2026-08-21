@@ -89,7 +89,7 @@ export default function InventoryAdjustments() {
     <main className="page">
       <header className="topbar">
         <div>
-          <Link to="/">← Dashboard</Link>
+          <Link to="/dashboard">← Dashboard</Link>
           <h1>Inventory Adjustments</h1>
         </div>
       </header>

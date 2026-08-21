@@ -246,7 +246,7 @@ async function assignWorkCenter(operationId, workCenterId) {
     <main className="page">
       <header className="topbar">
         <div>
-          <Link to="/">← Dashboard</Link>
+          <Link to="/dashboard">← Dashboard</Link>
           <h1>Bill of Materials</h1>
         </div>
       </header>

@@ -30,7 +30,7 @@ export default function StockLedger() {
     <main className="page">
       <header className="topbar">
         <div>
-          <Link to="/">← Dashboard</Link>
+          <Link to="/dashboard">← Dashboard</Link>
           <h1>Stock Ledger</h1>
         </div>
       </header>

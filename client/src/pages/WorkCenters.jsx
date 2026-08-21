@@ -57,7 +57,7 @@ export default function WorkCenters() {
     <main className="page">
       <header className="topbar">
         <div>
-          <Link to="/">← Dashboard</Link>
+          <Link to="/dashboard">← Dashboard</Link>
           <h1>Work Centers</h1>
         </div>
       </header>
