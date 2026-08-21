@@ -13,6 +13,7 @@ import WorkCenters from "./pages/WorkCenters";
 import BoMs from "./pages/BoMs";
 import ManufacturingOrders from "./pages/ManufacturingOrders";
 import WorkOrders from "./pages/WorkOrders";
+import InventoryAdjustments from "./pages/InventoryAdjustments";
 import "./styles.css";
 
 export default function App() {
@@ -51,6 +52,12 @@ export default function App() {
   path="/work-orders"
   element={<WorkOrders />}
 />
+
+<Route
+  path="/inventory-adjustments"
+  element={<InventoryAdjustments />}
+/>
+
 
           </Route>
         </Routes>
